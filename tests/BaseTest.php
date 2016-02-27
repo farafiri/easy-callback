@@ -5,17 +5,42 @@ use EasyCallback\Resource\X;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
+    public function testFReturnsFirstParam() {
+        $callback = f();
+        $this->assertEquals('a', $callback('a', 'b'));
+    }
+
+    public function testF2ReturnsSecondParam() {
+        $callback = f(2);
+        $this->assertEquals('b', $callback('a', 'b'));
+    }
+
     public function testArrayAccess() {
+        $callback = f()['x'];
+        $this->assertEquals('y', $callback(['x' => 'y']));
+    }
+
+    public function testPropertyAccess() {
+        $callback = f()->x;
+        $this->assertEquals('y', $callback((object)['x' => 'y']));
+    }
+
+    public function testFunctionCall() {
+        $callback = f()->getValue();
+        $this->assertEquals('a', $callback(new X('a')));
+    }
+
+    public function testNestedArrayAccess() {
         $callback = f()['x']['y'];
         $this->assertEquals('f', $callback(['x' => ['y' => 'f']]));
     }
 
-    public function testPropertyAccess() {
+    public function testNestedPropertyAccess() {
         $callback = f()->x->y;
         $this->assertEquals('f', $callback((object)['x' => (object)['y' => 'f']]));
     }
 
-    public function testFunctionCall() {
+    public function testNestedFunctionCall() {
         $callback = f()->append('b')->prepend('c')->getValue();
         $this->assertEquals('cab', $callback(new X('a')));
     }
@@ -40,5 +65,5 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $o = new X('O');
         $callback = f(1)->prepend(f($o)->value)->append(f(2)->getValue())->value;
         $this->assertEquals('OXY', $callback(new X('X'), new X('Y')));
-    }
+    }*/
 }
