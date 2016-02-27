@@ -12,6 +12,9 @@
         "psr-4": {
             "EasyCallback\\tests\\": "tests/",
             "EasyCallback\\": "src/"
-        }
+        },
+        "files": [
+            "src/f.php"
+        ]
     }
 }

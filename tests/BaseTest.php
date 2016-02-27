@@ -65,5 +65,5 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $o = new X('O');
         $callback = f(1)->prepend(f($o)->value)->append(f(2)->getValue())->value;
         $this->assertEquals('OXY', $callback(new X('X'), new X('Y')));
-    }*/
+    }
 }
