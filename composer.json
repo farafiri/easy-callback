@@ -14,7 +14,8 @@
             "EasyCallback\\": "src/"
         },
         "files": [
-            "src/f.php"
+            "src/f.php",
+            "src/functions.php"
         ]
     }
 }

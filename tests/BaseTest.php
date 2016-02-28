@@ -66,4 +66,17 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $callback = f(1)->prepend(f($o)->value)->append(f(2)->getValue())->value;
         $this->assertEquals('OXY', $callback(new X('X'), new X('Y')));
     }
+
+    public function testMatchMethod() {
+        $callback = f()->ecMatch('/TEST/');
+        $this->assertTrue($callback('abcTESTdfg'));
+        $this->assertFalse($callback('abcTESdfg'));
+    }
+
+
+    public function testMatchFunction() {
+        $callback = f\match('/TEST/');
+        $this->assertTrue($callback('abcTESTdfg'));
+        $this->assertFalse($callback('abcTESdfg'));
+    }
 }

@@ -21,7 +21,19 @@ abstract class Wrapper implements \ArrayAccess {
     }
 
     public function __call($method, $args) {
-        return new CallWrapper($this, $method, $args);
+        if (substr($method, 0, 2) == 'ec') {
+            $class = 'EasyCallback\\Func\\' . substr($method, 2);
+            if (!class_exists($class) || !defined("$class::REQUIRED_PARAM") || $class::REQUIRED_PARAM === null) {
+                throw new Exception("Method $method don't exists");
+            }
+            if ($class::REQUIRED_PARAM > count($args)) {
+                throw new Exception("Method $method requires at least " . $class::REQUIRED_PARAM . " parameters");
+            }
+
+            return new $class($this, $args);
+        } else {
+            return new CallWrapper($this, $method, $args);
+        }
     }
 
     public function offsetGet ($offset) {
