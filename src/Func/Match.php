@@ -13,6 +13,7 @@ class Match extends Base {
    const REQUIRED_PARAM = 1;
 
    protected function func($wrapped, $args) {
-       return (boolean) preg_match($this->getVal(0, $args), $wrapped);
+       $result = (boolean) preg_match($this->getVal(0, $args), $wrapped);
+       return $this->getVal($result ? 2 : 1, $args, $result);
    }
 } 

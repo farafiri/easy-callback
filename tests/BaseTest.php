@@ -73,10 +73,87 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($callback('abcTESdfg'));
     }
 
-
     public function testMatchFunction() {
         $callback = f\match('/TEST/');
         $this->assertTrue($callback('abcTESTdfg'));
         $this->assertFalse($callback('abcTESdfg'));
+    }
+
+    public function testMatchReturnValues() {
+        $callback = f()->value->ecMatch('/TEST/', 'b', f()->throwException());
+        $this->assertEquals('b', $callback(new X('TESd')));
+
+        $callback = f()->value->ecMatch('/TEST/', f()->throwException(), 'c');
+        $this->assertEquals('c', $callback(new X('TEST')));
+    }
+
+    public function testConvertToClosure() {
+        $callback = f()['a']->ecEq('b')->ecClosure();
+        $this->assertTrue($callback instanceof \Closure);
+        $this->assertFalse($callback(['a' => 'c']));
+        $this->assertTrue($callback(['a' => 'b']));
+    }
+
+    public function testIsInstanceOf() {
+        $callback = f()->ecIsInstanceOf(X::class);
+        $this->assertTrue($callback(new X('a')));
+        $this->assertFalse($callback(new static()));
+        $this->assertFalse($callback(23));
+    }
+
+    public function testIf() {
+        $callback = f()->value->ecMatch('/TEST/')->ecIf('b', f()->throwException());
+        $this->assertEquals('b', $callback(new X('TEST')));
+
+        $callback = f()->value->ecMatch('/TEST/')->ecIf(f()->throwException(), 'c');
+        $this->assertEquals('c', $callback(new X('TESd')));
+    }
+
+    public function testEq() {
+        $callback = f\eq('a');
+        $this->assertTrue($callback('a'));
+        $this->assertFalse($callback('b'));
+    }
+
+    public function testOr() {
+        $callback = f\_or(f\eq('a'), f\eq('b'));
+        $this->assertTrue($callback('a'));
+        $this->assertTrue($callback('b'));
+        $this->assertFalse($callback('c'));
+    }
+
+    public function testOrDontReturnTrueButFirstNonFalsyWalue() {
+        $callback = f\_or(f(), f('b'));
+        $this->assertEquals('a', $callback('a'));
+        $this->assertEquals('b', $callback(''));
+    }
+
+    public function testOrDontReturnFalseButLastFalsyWalue() {
+        $callback = f\_or(f(), f\eq(''));
+        $this->assertEquals('a', $callback('a'));
+        $this->assertEquals('', $callback(false));
+    }
+
+    public function testAnd() {
+        $callback = f\_and(f\match('/a/'), f\match('/b/'));
+        $this->assertFalse($callback('cad'));
+        $this->assertFalse($callback('cbd'));
+        $this->assertTrue($callback('cbdae'));
+    }
+
+    public function testConcat() {
+        $callback = f\concat('{', f(), '}');
+        $this->assertEquals('{a}', $callback('a'));
+    }
+
+    public function testReplace() {
+        $callback = f\replace('/a/', 'A');
+        $this->assertEquals('bAcdA', $callback('bacda'));
+    }
+
+    public function testReplaceWithCb() {
+        //parameters are overrode
+        $callback = f\replace('/\{(\d+)\}/', f\concat('(', f()[1] , ')'));
+        $this->assertEquals('a(123)(4) (56)f', $callback('a{123}{4} {56}f'));
     }
 }

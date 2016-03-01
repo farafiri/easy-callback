@@ -27,4 +27,8 @@ class X {
     public function getValue() {
         return $this->value;
     }
+
+    public function throwException() {
+        throw new \Exception();
+    }
 } 
