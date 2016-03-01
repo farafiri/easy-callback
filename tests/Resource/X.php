@@ -31,4 +31,8 @@ class X {
     public function throwException() {
         throw new \Exception();
     }
+
+    public static function getInstance($str) {
+        return new self($str);
+    }
 } 

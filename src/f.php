@@ -8,6 +8,6 @@
 
 namespace EasyCallback;
 
-function f($obj = 1) {
-    return new HeadWrapper($obj);
+function f($obj = 1, $type = null) {
+    return new HeadWrapper($obj, $type);
 }

@@ -123,7 +123,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testOrDontReturnTrueButFirstNonFalsyWalue() {
-        $callback = f\_or(f(), f('b'));
+        $callback = f\_or(f(), f('b', true));
         $this->assertEquals('a', $callback('a'));
         $this->assertEquals('b', $callback(''));
     }
@@ -155,5 +155,18 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         //parameters are overrode
         $callback = f\replace('/\{(\d+)\}/', f\concat('(', f()[1] , ')'));
         $this->assertEquals('a(123)(4) (56)f', $callback('a{123}{4} {56}f'));
+    }
+
+    public function testWrappingFunctions() {
+        $callback = f('strtolower')->ecEq('a');
+        $this->assertTrue($callback('a'));
+        $this->assertTrue($callback('A'));
+        $this->assertFalse($callback('b'));
+    }
+
+    public function testWrappingStaticFunctions() {
+        $callback = f([X::class, 'getInstance'], false);
+        $this->assertEquals('x', $callback('x')->getValue());
+
     }
 }
