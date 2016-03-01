@@ -21,8 +21,16 @@ abstract class Wrapper implements \ArrayAccess {
     }
 
     public function __call($method, $args) {
-        if (substr($method, 0, 2) == 'ec') {
+        if ($method == 'ecClosure') {
+            $wrapped = $this;
+            return function () use ($wrapped) {
+                return call_user_func_array($this, func_get_args());
+            };
+        } if (substr($method, 0, 2) == 'ec') {
             $class = 'EasyCallback\\Func\\' . substr($method, 2);
+            if (!class_exists($class)) {
+                $class = 'EasyCallback\\Func\\_' . substr($method, 2);
+            }
             if (!class_exists($class) || !defined("$class::REQUIRED_PARAM") || $class::REQUIRED_PARAM === null) {
                 throw new Exception("Method $method don't exists");
             }
