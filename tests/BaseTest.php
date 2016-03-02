@@ -167,6 +167,12 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testWrappingStaticFunctions() {
         $callback = f([X::class, 'getInstance'], false);
         $this->assertEquals('x', $callback('x')->getValue());
+    }
 
+    public function testCall() {
+        $callback = f('in_array')->ecCall(f(), ['a', 'b']);
+        $this->assertTrue($callback('a'));
+        $this->assertTrue($callback('b'));
+        $this->assertFalse($callback('c'));
     }
 }
