@@ -175,4 +175,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callback('b'));
         $this->assertFalse($callback('c'));
     }
+
+    public function testCmp() {
+        $callback = f()->getValue()->ecStrCmp(false, false, true);
+        $q = [new X('a8b'), new X('a3b'), new X('a12b'), new X('a5b')];
+        $expected = [$q[1], $q[3], $q[0], $q[2]];
+        usort($q, $callback);
+        $this->assertEquals($expected, $q);
+    }
+
+    public function testNatCmp() {
+        $callback = f()->getValue()->ecStrCmp(false, false, true);
+        $q = [new X('a8b'), new X('a3b'), new X('a12b'), new X('a5b')];
+        $expected = [$q[1], $q[3], $q[0], $q[2]];
+        usort($q, $callback);
+        $this->assertEquals($expected, $q);
+    }
 }
