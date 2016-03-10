@@ -15,3 +15,4 @@ function concat($string1, $string2) {
     return new \EasyCallback\Func\Concat(\EasyCallback\f($string1, true), $args);
 }
 function replace($pattern, $replacement) {return \EasyCallback\f()->ecReplace($pattern, $replacement);}
+function nvl() {return new \EasyCallback\Func\Nvl(null, func_get_args());}

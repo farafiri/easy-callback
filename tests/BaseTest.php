@@ -191,4 +191,29 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         usort($q, $callback);
         $this->assertEquals($expected, $q);
     }
+
+    public function testNvlReturnsFirstNotNullValue() {
+        $callback = f\nvl(f(), f(2));
+        $this->assertEquals(45, $callback(45, 56));
+        $this->assertEquals(45, $callback(45, null));
+        $this->assertEquals(45, $callback(null, 45));
+        $this->assertEquals(false, $callback(false, 45));
+    }
+
+    public function testNvlArgEvaluateToNullOnAccessToEmptyPropertyOrCallingMethodOnNull() {
+        $callback = f\nvl(f()['a']['b']['c'], 12);
+        $this->assertEquals(12, $callback([]));
+        $this->assertEquals(12, $callback(['a' => []]));
+        $this->assertEquals(12, $callback(['a' => ['b' => []]]));
+        $this->assertEquals(30, $callback(['a' => ['b' => ['c' => 30]]]));
+
+        $callback = f\nvl(f()->a->b, 12);
+        $this->assertEquals(12, $callback((object)[]));
+        $this->assertEquals(12, $callback((object)['a' => (object)[]]));
+        $this->assertEquals(37, $callback((object)['a' => (object)['b' => 37]]));
+
+        $callback = f\nvl(f()->prepend('a')->getValue(), 12);
+        $this->assertEquals(12, $callback(null));
+        $this->assertEquals('ab', $callback(new X('b')));
+    }
 }
