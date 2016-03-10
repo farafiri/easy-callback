@@ -36,7 +36,7 @@ class CallWrapper extends Wrapper {
             }
             return call_user_func_array([$wrapped, $method], $params);
         } else {
-            throw new ExceptionException("Try to call non existing method: $method on object " . get_class($wrapped));
+            throw new Exception("Try to call non existing method: $method on object " . get_class($wrapped));
         }
     }
 } 
