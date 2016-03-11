@@ -216,4 +216,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(12, $callback(null));
         $this->assertEquals('ab', $callback(new X('b')));
     }
+
+    public function testTrim() {
+        $callable = f\trim(f(), 'a');
+        $this->assertEquals('b', $callable('aaaaba'));
+    }
+
+    public function testTrimWithoutArgsDefault() {
+        $callable = f\trim();
+        $this->assertEquals('b', $callable('   b '));
+        $this->assertEquals('aaaba', $callable('aaaba', 'a'));
+    }
+
+    public function testFunctionsWrapping() {
+        $callable = f\ucfirst(f\strtolower(f\trim()));
+        $this->assertEquals('Abc', $callable('aBC '));
+    }
 }
