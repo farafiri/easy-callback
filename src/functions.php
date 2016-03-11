@@ -73,3 +73,8 @@ function stristr() {return fn('stristr', func_get_args());}
 
 function chr() {return fn('chr', func_get_args());}
 function ord() {return fn('ord', func_get_args());}
+
+function gt($p1) {return \EasyCallback\f()->ecGt($p1);}
+function egt($p1) {return \EasyCallback\f()->ecEGt($p1);}
+function lt($p1) {return \EasyCallback\f()->ecLt($p1);}
+function elt($p1) {return \EasyCallback\f()->ecELt($p1);}
