@@ -260,4 +260,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callable(5));
         $this->assertFalse($callable(6));
     }
+
+    public function testGtFunctionWithOneParam() {
+        $callable = f\gt(5);
+        $this->assertFalse($callable(4));
+        $this->assertFalse($callable(5));
+        $this->assertTrue($callable(6));
+    }
+
+    public function testGtFunctionWithTwoParams() {
+        $callable = f\gt(f\gt(10)->ecIf(0, f()) ,5);
+        $this->assertFalse($callable(4));
+        $this->assertFalse($callable(5));
+        $this->assertTrue($callable(6));
+        $this->assertTrue($callable(10));
+        $this->assertFalse($callable(11));
+    }
 }

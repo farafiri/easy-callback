@@ -9,5 +9,8 @@
 namespace EasyCallback;
 
 function f($obj = 1, $type = null) {
+    if ($obj instanceof Wrapper) {
+        return $obj;
+    }
     return new HeadWrapper($obj, $type);
 }

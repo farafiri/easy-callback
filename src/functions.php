@@ -2,24 +2,31 @@
 
 namespace EasyCallback\f;
 
-function fixArgs($args) {
+function atLeastOneArg($args) {
     return $args ? $args : array(\EasyCallback\f());
 }
-function fn($f, $args) {
-    return \EasyCallback\f($f)->__call('ecCall', fixArgs($args));
+
+function atLeastTwoArgs($args) {
+    return count($args) == 1 ? array_merge(array(\EasyCallback\f()), $args) : $args;
 }
-function match($pattern) { return \EasyCallback\f()->ecMatch($pattern); };
-function isInstanceOf($className) { return \EasyCallback\f()->ecIsInstanceOf($className); };
+
+function fn($f, $args) {
+    return \EasyCallback\f($f)->__call('ecCall', atLeastOneArg($args));
+}
+
+function fn2($f, $args) {
+    $arg = array_shift($args);
+    return \EasyCallback\f($arg, true)->__call($f, $args);
+}
+
+function match($pattern) { return fn2('ecMatch', atLeastTwoArgs(func_get_args())); };
+function isInstanceOf($className) { return fn2('ecIsInstanceOf', atLeastTwoArgs(func_get_args())); };
 function condition($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond)->ecIf($onTrue, $onFalse);}
 function _if($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond, false)->ecIf($onTrue, $onFalse);}
-function _or($p1, $p2, $p3 = false, $p4 = false) {return \EasyCallback\f($p1, false)->ecOr($p2, $p3, $p4);}
-function eq($p1) {return \EasyCallback\f()->ecEq($p1);}
-function _and($p1, $p2, $p3 = true, $p4 = true) {return \EasyCallback\f($p1, false)->ecAnd($p2, $p3, $p4);}
-function concat($string1, $string2) {
-    $args = func_get_args();
-    array_shift($args);
-    return new \EasyCallback\Func\Concat(\EasyCallback\f($string1, true), $args);
-}
+function _or($p1, $p2) {return fn2('ecOr', func_get_args());}
+function eq($p1) {return fn2('ecEq', atLeastTwoArgs(func_get_args()));}
+function _and($p1, $p2) {return fn2('ecAnd', func_get_args());}
+function concat($string1, $string2) {return fn2('ecConcat', func_get_args());}
 function replace($pattern, $replacement) {return \EasyCallback\f()->ecReplace($pattern, $replacement);}
 function nvl() {return new \EasyCallback\Func\Nvl(null, func_get_args());}
 
@@ -74,7 +81,7 @@ function stristr() {return fn('stristr', func_get_args());}
 function chr() {return fn('chr', func_get_args());}
 function ord() {return fn('ord', func_get_args());}
 
-function gt($p1) {return \EasyCallback\f()->ecGt($p1);}
-function egt($p1) {return \EasyCallback\f()->ecEGt($p1);}
-function lt($p1) {return \EasyCallback\f()->ecLt($p1);}
-function elt($p1) {return \EasyCallback\f()->ecELt($p1);}
+function gt($p1) {return fn2('ecGt', atLeastTwoArgs(func_get_args()));}
+function egt($p1) {return fn2('ecEGt', atLeastTwoArgs(func_get_args()));}
+function lt($p1) {return fn2('ecLt', atLeastTwoArgs(func_get_args()));}
+function elt($p1) {return fn2('ecELt', atLeastTwoArgs(func_get_args()));}
