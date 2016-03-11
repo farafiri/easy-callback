@@ -232,4 +232,32 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $callable = f\ucfirst(f\strtolower(f\trim()));
         $this->assertEquals('Abc', $callable('aBC '));
     }
+
+    public function testGt() {
+        $callable = f()->ecGt(5);
+        $this->assertFalse($callable(4));
+        $this->assertFalse($callable(5));
+        $this->assertTrue($callable(6));
+    }
+
+    public function testEGt() {
+        $callable = f()->ecEGt(5);
+        $this->assertFalse($callable(4));
+        $this->assertTrue($callable(5));
+        $this->assertTrue($callable(6));
+    }
+
+    public function testLt() {
+        $callable = f()->ecLt(5);
+        $this->assertTrue($callable(4));
+        $this->assertFalse($callable(5));
+        $this->assertFalse($callable(6));
+    }
+
+    public function testELt() {
+        $callable = f()->ecELt(5);
+        $this->assertTrue($callable(4));
+        $this->assertTrue($callable(5));
+        $this->assertFalse($callable(6));
+    }
 }
