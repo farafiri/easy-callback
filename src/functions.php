@@ -94,3 +94,6 @@ function sub() {return fn2('ecSub', atLeastTwoArgs(func_get_args()));}
 function mul() {return fn2('ecMul', atLeastTwoArgs(func_get_args()));}
 function div() {return fn2('ecDiv', atLeastTwoArgs(func_get_args()));}
 function mod() {return fn2('ecMod', atLeastTwoArgs(func_get_args()));}
+
+function max() {return fn2('ecMax', atLeastTwoArgs(func_get_args()));}
+function min() {return fn2('ecMin', atLeastTwoArgs(func_get_args()));}

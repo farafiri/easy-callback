@@ -281,4 +281,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $callable = f\add();
         $this->assertEquals(10, $callable(4, 6));
     }
+
+    public function testWithReduce() {
+        $this->assertEquals(8, array_reduce(array(3, 5, 8, 2, 7), f\max()));
+        $this->assertEquals(25, array_reduce(array(3, 5, 8, 2, 7), f\add()));
+    }
 }
