@@ -7,6 +7,9 @@ function atLeastOneArg($args) {
 }
 
 function atLeastTwoArgs($args) {
+    if (count($args) == 0) {
+        return array(\EasyCallback\f(), \EasyCallback\f(2));
+    }
     return count($args) == 1 ? array_merge(array(\EasyCallback\f()), $args) : $args;
 }
 
@@ -24,7 +27,7 @@ function isInstanceOf($className) { return fn2('ecIsInstanceOf', atLeastTwoArgs(
 function condition($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond)->ecIf($onTrue, $onFalse);}
 function _if($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond, false)->ecIf($onTrue, $onFalse);}
 function _or($p1, $p2) {return fn2('ecOr', func_get_args());}
-function eq($p1) {return fn2('ecEq', atLeastTwoArgs(func_get_args()));}
+function eq() {return fn2('ecEq', atLeastTwoArgs(func_get_args()));}
 function _and($p1, $p2) {return fn2('ecAnd', func_get_args());}
 function concat($string1, $string2) {return fn2('ecConcat', func_get_args());}
 function replace($pattern, $replacement) {return \EasyCallback\f()->ecReplace($pattern, $replacement);}
@@ -81,7 +84,13 @@ function stristr() {return fn('stristr', func_get_args());}
 function chr() {return fn('chr', func_get_args());}
 function ord() {return fn('ord', func_get_args());}
 
-function gt($p1) {return fn2('ecGt', atLeastTwoArgs(func_get_args()));}
-function egt($p1) {return fn2('ecEGt', atLeastTwoArgs(func_get_args()));}
-function lt($p1) {return fn2('ecLt', atLeastTwoArgs(func_get_args()));}
-function elt($p1) {return fn2('ecELt', atLeastTwoArgs(func_get_args()));}
+function gt() {return fn2('ecGt', atLeastTwoArgs(func_get_args()));}
+function egt() {return fn2('ecEGt', atLeastTwoArgs(func_get_args()));}
+function lt() {return fn2('ecLt', atLeastTwoArgs(func_get_args()));}
+function elt() {return fn2('ecELt', atLeastTwoArgs(func_get_args()));}
+
+function add() {return fn2('ecAdd', atLeastTwoArgs(func_get_args()));}
+function sub() {return fn2('ecSub', atLeastTwoArgs(func_get_args()));}
+function mul() {return fn2('ecMul', atLeastTwoArgs(func_get_args()));}
+function div() {return fn2('ecDiv', atLeastTwoArgs(func_get_args()));}
+function mod() {return fn2('ecMod', atLeastTwoArgs(func_get_args()));}

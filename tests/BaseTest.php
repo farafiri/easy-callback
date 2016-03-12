@@ -276,4 +276,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callable(10));
         $this->assertFalse($callable(11));
     }
+
+    public function testAddFunctionWithoutParams() {
+        $callable = f\add();
+        $this->assertEquals(10, $callable(4, 6));
+    }
 }
