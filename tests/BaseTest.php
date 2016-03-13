@@ -296,4 +296,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $callable = f()->ecAllMatches('/a(\d*)/');
         $this->assertEquals(array(array('a12', 'a'), array('12', '')), $callable('a12a'));
     }
+
+    public function testCastingFunction() {
+        $callable = f\to_int();
+        $this->assertSame(123, $callable('123'));
+        $this->assertSame(1, $callable(true));
+    }
 }

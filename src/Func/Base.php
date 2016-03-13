@@ -9,8 +9,6 @@
 namespace EasyCallback\Func;
 
 abstract class Base extends Func {
-
-
     public function __invoke() {
         $args = $args = func_get_args();
         $wrapped = call_user_func_array($this->wrapped, $args);

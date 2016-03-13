@@ -107,3 +107,8 @@ function is_int() {return fn('is_int', func_get_args());}
 function is_numeric() {return fn('is_numeric', func_get_args());}
 function is_object() {return fn('is_object', func_get_args());}
 function is_scalar() {return fn('is_scalar', func_get_args());}
+
+function to_bool() {return fn2('ecToBool', atLeastOneArg(func_get_args()));}
+function to_float() {return fn2('ecToFloat', atLeastOneArg(func_get_args()));}
+function to_int() {return fn2('ecToInt', atLeastOneArg(func_get_args()));}
+function to_string() {return fn2('ecToString', atLeastOneArg(func_get_args()));}
