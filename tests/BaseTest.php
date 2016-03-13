@@ -286,4 +286,14 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(8, array_reduce(array(3, 5, 8, 2, 7), f\max()));
         $this->assertEquals(25, array_reduce(array(3, 5, 8, 2, 7), f\add()));
     }
+
+    public function testMatches() {
+        $callable = f()->ecMatches('/a(\d*)/');
+        $this->assertEquals(array('a12', '12'), $callable('a12a'));
+    }
+
+    public function testAllMatches() {
+        $callable = f()->ecAllMatches('/a(\d*)/');
+        $this->assertEquals(array(array('a12', 'a'), array('12', '')), $callable('a12a'));
+    }
 }
