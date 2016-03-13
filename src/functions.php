@@ -97,3 +97,13 @@ function mod() {return fn2('ecMod', atLeastTwoArgs(func_get_args()));}
 
 function max() {return fn2('ecMax', atLeastTwoArgs(func_get_args()));}
 function min() {return fn2('ecMin', atLeastTwoArgs(func_get_args()));}
+
+function is_string() {return fn('is_string', func_get_args());}
+function is_array() {return fn('is_array', func_get_args());}
+function is_bool() {return fn('is_bool', func_get_args());}
+function is_callable() {return fn('is_callable', func_get_args());}
+function is_float() {return fn('is_float', func_get_args());}
+function is_int() {return fn('is_int', func_get_args());}
+function is_numeric() {return fn('is_numeric', func_get_args());}
+function is_object() {return fn('is_object', func_get_args());}
+function is_scalar() {return fn('is_scalar', func_get_args());}
