@@ -1,6 +1,7 @@
 <?php
 
 namespace EasyCallback\f;
+use EasyCallback\Wrapper;
 
 function atLeastOneArg($args) {
     return $args ? $args : array(\EasyCallback\f());
@@ -26,10 +27,11 @@ function match($pattern) { return fn2('ecMatch', atLeastTwoArgs(func_get_args())
 function isInstanceOf($className) { return fn2('ecIsInstanceOf', atLeastTwoArgs(func_get_args())); };
 function condition($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond)->ecIf($onTrue, $onFalse);}
 function _if($cond, $onTrue = true, $onFalse = false) {return \EasyCallback\f($cond, false)->ecIf($onTrue, $onFalse);}
-function _or($p1, $p2) {return fn2('ecOr', func_get_args());}
+function _or($p1, $p2) {return fn2('ecOr', atLeastTwoArgs(func_get_args()));}
 function eq() {return fn2('ecEq', atLeastTwoArgs(func_get_args()));}
-function _and($p1, $p2) {return fn2('ecAnd', func_get_args());}
-function concat($string1, $string2) {return fn2('ecConcat', func_get_args());}
+function is() {return fn2('ecIs', atLeastTwoArgs(func_get_args()));}
+function _and() {return fn2('ecAnd', atLeastTwoArgs(func_get_args()));}
+function concat($string1, $string2) {return fn2('ecConcat', atLeastTwoArgs(func_get_args()));}
 function replace($pattern, $replacement) {return \EasyCallback\f()->ecReplace($pattern, $replacement);}
 function nvl() {return new \EasyCallback\Func\Nvl(null, func_get_args());}
 
@@ -95,6 +97,15 @@ function mul() {return fn2('ecMul', atLeastTwoArgs(func_get_args()));}
 function div() {return fn2('ecDiv', atLeastTwoArgs(func_get_args()));}
 function mod() {return fn2('ecMod', atLeastTwoArgs(func_get_args()));}
 
+function round() {return fn('round', atLeastOneArg(func_get_args()));}
+function floor() {return fn('floor', atLeastOneArg(func_get_args()));}
+function sqrt() {return fn('sqrt', atLeastOneArg(func_get_args()));}
+function sqr() {return fn('sqr', atLeastOneArg(func_get_args()));}
+function pow() {return fn('pow', atLeastTwoArgs(func_get_args()));}
+function exp() {return fn('exp', atLeastOneArg(func_get_args()));}
+function log() {return fn('log', atLeastOneArg(func_get_args()));}
+function abs() {return fn('abs', atLeastOneArg(func_get_args()));}
+
 function max() {return fn2('ecMax', atLeastTwoArgs(func_get_args()));}
 function min() {return fn2('ecMin', atLeastTwoArgs(func_get_args()));}
 
@@ -112,3 +123,103 @@ function to_bool() {return fn2('ecToBool', atLeastOneArg(func_get_args()));}
 function to_float() {return fn2('ecToFloat', atLeastOneArg(func_get_args()));}
 function to_int() {return fn2('ecToInt', atLeastOneArg(func_get_args()));}
 function to_string() {return fn2('ecToString', atLeastOneArg(func_get_args()));}
+
+function v() {return fn('EasyCallback\internal\valuesIterator', atLeastOneArg(func_get_args()));}
+function values() {return fn('EasyCallback\internal\valuesIterator', atLeastOneArg(func_get_args()));}
+function a() {return fn('iterator_to_array', atLeastOneArg(func_get_args()));}
+function iteratorToArray() {return fn('iterator_to_array', atLeastOneArg(func_get_args()));}
+
+function higherOrderFunction($fn, $args, $closureFrom = 2) {
+    if ($args[0] instanceof Wrapper) {
+        if (count($args) === 1) {
+            $args = [\EasyCallback\f(), $args[0]];
+        }
+        foreach($args as $i => &$arg) {
+            if ($i >= ($closureFrom - 1) && $arg instanceof \EasyCallback\Wrapper) {
+                $arg = $arg->ecClosure();
+            }
+        }
+
+        return fn($fn, $args);
+    } else {
+        return call_user_func_array($fn, $args);
+    }
+};
+
+function map() {return higherOrderFunction('EasyCallback\internal\mapIterator', func_get_args());};
+function filter() {return higherOrderFunction('EasyCallback\internal\filterIterator',func_get_args());};
+function first() {return higherOrderFunction('EasyCallback\internal\first',func_get_args());};
+function last() {return higherOrderFunction('EasyCallback\internal\last',func_get_args());};
+function firstKey() {return higherOrderFunction('EasyCallback\internal\firstKey',func_get_args());};
+function lastKey() {return higherOrderFunction('EasyCallback\internal\lastKey',func_get_args());};
+function maximum() {return higherOrderFunction('EasyCallback\internal\maximum',func_get_args());};
+function minimum() {return higherOrderFunction('EasyCallback\internal\minimum',func_get_args());};
+function maximumKey() {return higherOrderFunction('EasyCallback\internal\maximumKey',func_get_args());};
+function minimumKey() {return higherOrderFunction('EasyCallback\internal\minimumKey',func_get_args());};
+function groupBy() {return higherOrderFunction('EasyCallback\internal\groupBy',func_get_args());};
+function some() {return higherOrderFunction('EasyCallback\internal\some',func_get_args());};
+function every() {return higherOrderFunction('EasyCallback\internal\every',func_get_args());};
+function none() {return higherOrderFunction('EasyCallback\internal\none',func_get_args());};
+function duplicates() {return higherOrderFunction('EasyCallback\internal\duplicates',func_get_args());};
+function unique() {return higherOrderFunction('EasyCallback\internal\uniqueIterator',func_get_args());};
+function chunk() {return higherOrderFunction('EasyCallback\internal\chunkIterator',func_get_args());};
+function flatten() {return higherOrderFunction('EasyCallback\internal\flattenIterator',func_get_args());};
+function flatMap() {return higherOrderFunction('EasyCallback\internal\flatMapIterator',func_get_args());};
+function join() {return higherOrderFunction('EasyCallback\internal\join',func_get_args(), 3);};
+function joinByValue() {return higherOrderFunction('EasyCallback\internal\joinByValue',func_get_args(), 3);};
+function reduce() {return higherOrderFunction('EasyCallback\internal\reduce',func_get_args());};
+function recursive() {return higherOrderFunction('EasyCallback\internal\recursiveIterator',func_get_args());};
+
+
+function where() {return fn(function($item, $filter = 1) {
+    if ($item === null) {
+        return false;
+    } if (\is_array($item)) {
+        foreach($filter as $key => $value) {
+            if (isset($item[$key])) {
+                if ($value instanceof \EasyCallback\Wrapper) {
+                    /** @var $value callable */
+                    if (!$value($item[$key])) {
+                        return false;
+                    }
+                } else {
+                    if ($value !== $item[$key]) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    } elseif (\is_object($item)) {
+        foreach($filter as $key => $value) {
+            $getter = 'get' . \ucfirst($key);
+            if (\method_exists($item, $getter)) {
+                $itemValue = $item->$getter();
+            } elseif (\method_exists($item, $key)) {
+                $itemValue = $item->$key();
+            } elseif (\property_exists($item, $key)) {
+                $itemValue = $item->$key;
+            } else {
+                throw new \EasyCallback\Exception("where-d object don't have $getter method nor $key method nor $key property");
+            }
+
+            if ($value instanceof \EasyCallback\Wrapper) {
+                /** @var $value callable */
+                if (!$value($itemValue)) {
+                    return false;
+                }
+            } else {
+                if ($value !== $itemValue) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    } else {
+        throw new \EasyCallback\Exception("where-d item should be array or object");
+    }
+},atLeastTwoArgs(func_get_args()));};

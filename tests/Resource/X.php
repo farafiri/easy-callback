@@ -11,9 +11,11 @@ namespace EasyCallback\Resource;
 
 class X {
     public $value;
+    protected $x;
 
-    public function __construct($value) {
+    public function __construct($value, $x = null) {
         $this->value = $value;
+        $this->x     = $x;
     }
 
     public function prepend($str) {
@@ -26,6 +28,10 @@ class X {
 
     public function getValue() {
         return $this->value;
+    }
+
+    public function getX() {
+        return $this->x;
     }
 
     public function throwException() {

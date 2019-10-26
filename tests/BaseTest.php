@@ -302,4 +302,91 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(123, $callable('123'));
         $this->assertSame(1, $callable(true));
     }
+
+    public function testIs() {
+        $callable = f\is('5');
+        $this->assertTrue($callable("5"));
+        $this->assertFalse($callable(5));
+        $this->assertFalse($callable(null));
+
+        $callable = f\is(null);
+        $this->assertTrue($callable("5"));
+        $this->assertTrue($callable(5));
+        $this->assertTrue($callable(null));
+        $this->assertTrue($callable(new X('x')));
+    }
+
+    public function testWhere() {
+        $callable = f\where([
+            'value' => 10,
+            'x'     => 33
+        ]);
+
+        $this->assertTrue($callable(['value' => 10, 'x' => 33, 'y' => 12]));
+        $this->assertTrue($callable(['x' => 33, 'value' => 10]));
+        $this->assertFalse($callable(['x' => 10, 'value' => 10]));
+        $this->assertFalse($callable(['x' => 33, 'value' => 33]));
+        $this->assertFalse($callable(['value' => 10]));
+        $this->assertTrue($callable(new X(10, 33)));
+        $this->assertFalse($callable(new X(33, 33)));
+        $this->assertFalse($callable(new X(10, 10)));
+    }
+
+    public function testWhereIsStrictTyped() {
+        $callable = f\where([
+            'value' => "10",
+            'x'     => 33
+        ]);
+
+        $this->assertTrue($callable(['value' => "10", 'x' => 33, 'y' => 12]));
+        $this->assertFalse($callable(['value' => 10, 'x' => 33, 'y' => 12]));
+        $this->assertTrue($callable(new X("10", 33)));
+        $this->assertFalse($callable(new X(10, 33)));
+    }
+
+    public function testWhereMayUseCallbacks() {
+        $callable = f\where([
+            'value' => f\gt(5),
+            'x'     => f\match('/^$|abcd/')
+        ]);
+
+        $this->assertTrue($callable(new X(10, '')));
+        $this->assertTrue($callable(new X(10, 'abcd')));
+        $this->assertTrue($callable(new X(6, 'abcd')));
+        $this->assertFalse($callable(new X(10, 'ab')));
+        $this->assertFalse($callable(new X(4, 'abcd')));
+        $this->assertFalse($callable(new X(4, '')));
+        $this->assertFalse($callable(new X(10, 'gggg')));
+        $this->assertFalse($callable(new X(2, 'gggg')));
+    }
+
+    public function testWhereOnNullReturnFalse() {
+        $callable = f\where([]);
+
+        $this->assertFalse($callable(null));
+    }
+
+    public function testWhereCanThrowExceptionIfMethodOrPropertyCantBeFound() {
+        $this->setExpectedException(Exception::class);
+
+        $callable = f\where([
+            'value' => 1,
+            'y'     => 1
+        ]);
+
+        $callable(new X(1, 1));
+    }
+
+    public function testNestedWhere() {
+        $callable = f\where([
+            'value' => f\where([
+                'x' => 20
+            ]),
+            'x'     => 10
+        ]);
+
+        $this->assertTrue($callable(new X(new X(50, 20), 10)));
+        $this->assertFalse($callable(new X(new X(50, 10), 10)));
+        $this->assertFalse($callable(new X(new X(50, 20), 20)));
+    }
 }

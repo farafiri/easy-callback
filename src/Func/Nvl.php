@@ -10,6 +10,8 @@ namespace EasyCallback\Func;
 
 
 class Nvl extends Func {
+    const REQUIRED_PARAM = 1;
+
     public function __invoke() {
         $args = func_get_args();
         foreach($this->params as $i => $_) {

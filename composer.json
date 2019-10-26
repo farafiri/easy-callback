@@ -15,6 +15,7 @@
         },
         "files": [
             "src/f.php",
+            "src/functionalFuncs.php",
             "src/functions.php"
         ]
     }
